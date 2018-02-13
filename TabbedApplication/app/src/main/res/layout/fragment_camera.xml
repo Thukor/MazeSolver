@@ -8,19 +8,21 @@
 
     <TextureView
         android:id="@+id/texture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_takepicture"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.148" />
 
     <Button
         android:id="@+id/btn_takepicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="76dp"
         android:text="@string/take_picture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -28,15 +30,16 @@
 
     <ToggleButton
         android:id="@+id/t"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="14dp"
-        android:text="@string/flash"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="462dp"
+        android:layout_marginEnd="36dp"
+
+        android:background="@drawable/ic_toggle_bg"
+        android:textOff=""
+        android:textOn=""
         app:layout_constraintBaseline_toBaselineOf="@+id/btn_takepicture"
         app:layout_constraintBottom_toBottomOf="@+id/btn_takepicture"
-        app:layout_constraintEnd_toStartOf="@+id/btn_takepicture" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>
