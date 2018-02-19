@@ -18,6 +18,7 @@ class Graph:
 		self.edge_set.add(edge) #add edge to edge set
 		self.adjacency_list[node1].add(node2) #add to adjacency list
 		self.adjacency_list[node2].add(node1) #add to adjacency list
+		return self #Return self for object chaining
 
 	def with_node(self, vertex_value):
 		node = Node(vertex_value)
