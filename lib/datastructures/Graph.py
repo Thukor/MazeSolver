@@ -15,6 +15,8 @@ class Graph:
 		node1 = Node(edge_component1) # create node for component 1
 		node2 = Node(edge_component2) # create node for component 2
 		edge = Edge(node1,node2)  #create edge for nodes
+		self.vertex_set.add(node1)
+		self.vertex_set.add(node2)
 		self.edge_set.add(edge) #add edge to edge set
 		self.adjacency_list[node1].add(node2) #add to adjacency list
 		self.adjacency_list[node2].add(node1) #add to adjacency list
