@@ -5,7 +5,8 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="take_picture">Capture &amp; Solve</string>
-    <string name="flash">Flash</string>
+    <string name="flashOff">Flash Off</string>
+    <string name="flashOn">Flash On</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
