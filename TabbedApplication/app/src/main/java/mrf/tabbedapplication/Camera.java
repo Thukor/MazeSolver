@@ -245,6 +245,7 @@ public class Camera extends AppCompatActivity {
             public void onSurfaceTextureUpdated(SurfaceTexture surface) {
 
             }
+
         };
 
         private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
@@ -315,6 +316,7 @@ public class Camera extends AppCompatActivity {
             } catch (CameraAccessException e) {
                 e.printStackTrace();
             }
+
         }
 
         private void connectCamera() {
