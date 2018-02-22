@@ -3,6 +3,10 @@ package mrf.tabbedapplication;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -15,10 +19,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -34,7 +38,9 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,18 +53,44 @@ public class Camera extends AppCompatActivity {
     protected SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private List<Fragment> mFragments = new Vector<>();
+    public class Box extends View {
+        private Paint paint = new Paint();
+        Box(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) { // Override the onDraw() Method
+            super.onDraw(canvas);
+
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setColor(Color.parseColor("#FF4081"));
+            paint.setStrokeWidth(10);
+            paint.setPathEffect(new DashPathEffect(new float[] {60,20}, 30));
+            //center
+            int x0 = canvas.getWidth()/2;
+            int y0 = canvas.getHeight()/2;
+            int dx = canvas.getHeight()/4;
+            int dy = canvas.getHeight()/4;
+            //draw guide box
+            canvas.drawRect(x0-dx, y0-65-dy, x0+dx, y0-65+dy, paint);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-
+//        Box guideBox = new Box(this);
+//        addContentView(guideBox, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mFragments.add(new cameraFragment());
         mFragments.add(new galleryFragment());
-
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 1);
+        }
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = findViewById(R.id.container);
@@ -97,6 +129,7 @@ public class Camera extends AppCompatActivity {
         private CaptureRequest.Builder mCaptureRequestBuilder;
         private CameraDevice mCameraDevice;
         private Button captureButton;
+        private ToggleButton toggleFlashBtn;
         private View rootView;
         private TextureView mTextureView;
         private HandlerThread mBackgroundHandlerThread;
@@ -138,6 +171,33 @@ public class Camera extends AppCompatActivity {
                 }
             });
 
+            toggleFlashBtn = rootView.findViewById(R.id.toggleFlashBtn);
+            assert toggleFlashBtn != null;
+            toggleFlashBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
+                    try {
+                        for (String cameraId : cameraManager.getCameraIdList()) {
+                            CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
+                            if (cameraCharacteristics.get(cameraCharacteristics.LENS_FACING) ==
+                                    CameraCharacteristics.LENS_FACING_FRONT) {
+                                continue;
+                            }
+                            //cameraManager.setTorchMode(cameraId, true);
+                            if (isChecked) {
+                                Toast.makeText(getActivity(), "flash is on", Toast.LENGTH_LONG).show();
+//                                cameraManager.setTorchMode(cameraId, true);
+                            } else {
+                                Toast.makeText(getActivity(), "flash is off", Toast.LENGTH_LONG).show();
+//                                cameraManager.setTorchMode(cameraId, false);
+                            }
+                        }
+                    }catch(CameraAccessException e){
+                        e.printStackTrace();
+                    }
+                }
+            });
             return rootView;
         }
 
@@ -185,6 +245,7 @@ public class Camera extends AppCompatActivity {
             public void onSurfaceTextureUpdated(SurfaceTexture surface) {
 
             }
+
         };
 
         private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
@@ -255,6 +316,7 @@ public class Camera extends AppCompatActivity {
             } catch (CameraAccessException e) {
                 e.printStackTrace();
             }
+
         }
 
         private void connectCamera() {
@@ -358,10 +420,12 @@ public class Camera extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
             View rootView = inflater.inflate(R.layout.fragment_gallery, container, false);
             return rootView;
         }
     }
+
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 

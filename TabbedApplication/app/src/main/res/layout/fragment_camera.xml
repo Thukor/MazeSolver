@@ -31,7 +31,7 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <ToggleButton
-        android:id="@+id/t"
+        android:id="@+id/toggleFlashBtn"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="36dp"
@@ -42,5 +42,24 @@
         app:layout_constraintBottom_toBottomOf="@+id/btn_takepicture"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/LICENSE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_takepicture"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
+    <View
+        android:id="@+id/myRectangleView"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:background="@drawable/rectangle"
+        app:layout_constraintTop_toTopOf="@id/texture"
+        app:layout_constraintBottom_toBottomOf="@id/texture"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 </android.support.constraint.ConstraintLayout>
