@@ -1,7 +1,10 @@
 class Node:
 	def __init__(self, coordinate):
 		self.coordinate = (*coordinate)
-		self.neighbors = []
+		self.north = None
+		self.south = None
+		self.east = None
+		self.west = None
 
 	def __hash__(self):
 		return hash(self.coordinate)
@@ -14,8 +17,3 @@ class Node:
 
 	def __eq__(self, other):
 		return str(self) == str(other)
-
-
-	def with_neighbor(self, node):
-		self.neighbors.append(node)
-		return self #Return self for potential object chaining
