@@ -1,4 +1,5 @@
 from .MazeBuilderUtil import *
+from ..datastructures.Node import *
 
 class MazeBuilder:
 	@staticmethod
