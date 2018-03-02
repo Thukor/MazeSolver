@@ -1,21 +1,14 @@
-from collections import deque
 
-def bfs(maze):
+from networkx.algorithm.traversal import *
+from networkx.algorithm.shortest_paths import *
 
-	seen = set()
-	start = maze.start 
-	seen.add(start)
-	frontier = deque([start])
 
-	while len(frontier) > 0:
-		current_node = frontier.popleft()
-		seen.add(current_node)
-		
-		if current_node == maze.end:
-			return True
+def nx_shortest_path(G, start, end):
+	return shortest_path(G,start,end)
 
-		for neighbor in current_node.children:
-			if neighbor in seen:
-				continue
-			seen.add(neighbor)
-	return False
+def a_star(G, start, end, heuristic):
+	return astar_path(G, start, end, heuristic)
+
+def dijkstra_shortest_path(G, start, end):
+	return dijsktra_path(G, start, end)
+
