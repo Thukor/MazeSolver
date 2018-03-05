@@ -1,7 +1,5 @@
-
 from networkx.algorithm.traversal import *
 from networkx.algorithm.shortest_paths import *
-
 
 def nx_shortest_path(G, start, end):
 	return shortest_path(G,start,end)

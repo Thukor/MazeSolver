@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
 import os
 import processing
+from MazeSolutionFinder import *
 
 class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 
@@ -17,14 +18,12 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 		self.wfile.write(image.read())
 
 	def _solve_maze(self):
-		prnt(self.headers)
 		content_length = int(self.headers['Content-Length'])
 		image = self.rfile.read(content_length)
 		with open("maze_solution.png", 'wb') as ms:
-			print("WRITING IMAGE")
+			#need a table to image dumper
 			ms.write(image)
 		self._set_headers_for_send_image("maze_solution.png")
-
 
 	def do_GET(self):
 		if "/solutions" in self.path:

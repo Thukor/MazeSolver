@@ -1,25 +1,34 @@
 from .MazeBuilderUtil import *
-from ..datastructures.Node import *
+import networkx as nx 
 
 class MazeBuilder:
 	@staticmethod
 	def build_maze(table):
 		x_bound = len(table)
 		y_bound = len(table[0])
-		node_dict = {(i,j-1): Node((i,j-1)) for (i,j) in enumerate(range(x_bound))}
+		Maze = nx.Graph()
 		def build_maze_helper(i,j):
 			if i >= x_bound or i < 0:
 				return None
 			if j >= y_bound or y < 0:
 				return None
-			node = node_dict[(i,j)]
+			Maze.add_node((i,j))
 			if not has_north_wall(table[i][j]):
-				node.north = build_maze_helper(i,j+1)
+				north_node = build_maze_helper(i,j+1)
+				if north_node is not None:
+					Maze.add_edge((i,j), north_node)
 			if not has_south_wall(table[i][j]):
-				node.south = build_maze_helper(i,j-1)
+				south_node = build_maze_helper(i,j-1)
+				if south_node is not None:
+					Maze.add_edge((i,j), south_node)
 			if not has_east_wall(table[i][j]):
-				node.east = build_maze_helper(i+1,j)
+				east_node = build_maze_helper(i+1,j)
+				if east_node is not None:
+					Maze.add_edge((i,j), east_node)
 			if not has_west_wall(table[i][j]):
-				node.west = build_maze_helper(i-1,j)
-			return node
-		return build_maze_helper(0,0)
+				west_node = build_maze_helper(i-1,j)
+				if west_node is not None:
+					Maze.add_edge((i,j), west_node)
+			return (i,j)
+		build_maze_helper(0,0)
+		return Maze
