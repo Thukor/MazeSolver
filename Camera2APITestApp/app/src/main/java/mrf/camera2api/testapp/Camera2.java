@@ -1,5 +1,6 @@
 package mrf.camera2api.testapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.Manifest;
@@ -30,6 +31,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,13 +39,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class Camera2 extends AppCompatActivity {
     private static final String TAG = "AndroidCameraApi";
     private Button takePictureButton;
+    private ImageButton mBtLaunchActivity;
     private TextureView textureView;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
@@ -66,6 +71,7 @@ public class Camera2 extends AppCompatActivity {
     private HandlerThread mBackgroundThread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera2);
         textureView = (TextureView) findViewById(R.id.texture);
@@ -76,9 +82,27 @@ public class Camera2 extends AppCompatActivity {
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takePicture();
+                try {
+                    takePicture();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
+        mBtLaunchActivity = (ImageButton) findViewById(R.id.btn_gallery);
+        createImageFolder();
+        mBtLaunchActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                launchActivity();
+            }
+        });
+    }
+    private void launchActivity() {
+
+        Intent intent = new Intent(this, Gallery.class);
+        startActivity(intent);
     }
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
@@ -139,7 +163,7 @@ public class Camera2 extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    protected void takePicture() {
+    protected void takePicture() throws IOException{
         if(null == cameraDevice) {
             Log.e(TAG, "cameraDevice is null");
             return;
@@ -167,7 +191,8 @@ public class Camera2 extends AppCompatActivity {
             // Orientation
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
-            final File file = new File(Environment.getExternalStorageDirectory()+"/pic.jpg");
+//            final File file = new File(Environment.getExternalStorageDirectory()+"/MazeSolver/nude.jpg");
+            final File file = createImageFileName();
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
@@ -225,6 +250,21 @@ public class Camera2 extends AppCompatActivity {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+    private File createImageFileName() throws IOException {
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String prepend = "MAZE_" + timestamp + "_";
+        File imageFile = File.createTempFile(prepend, ".jpg", createImageFolder());
+        return imageFile;
+    }
+
+    private File createImageFolder() {
+        File imageFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        File mImageFolder = new File(imageFile, "MazeSolver");
+        if (!mImageFolder.exists()) {
+            mImageFolder.mkdirs();
+        }
+        return mImageFolder;
     }
     protected void createCameraPreview() {
         try {
