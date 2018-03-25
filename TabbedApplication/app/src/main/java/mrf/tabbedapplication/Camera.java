@@ -53,6 +53,7 @@ public class Camera extends AppCompatActivity {
     protected SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private List<Fragment> mFragments = new Vector<>();
+    public static CameraManager cameraManager;
     public class Box extends View {
         private Paint paint = new Paint();
         Box(Context context) {
@@ -136,6 +137,7 @@ public class Camera extends AppCompatActivity {
         private Handler mBackgroundHandler;
         private String mCameraId;
         private Size mPreviewSize;
+        private Boolean isTorchOn;
 
         private static SparseIntArray ORIENTATIONS = new SparseIntArray();
         static {
@@ -155,6 +157,28 @@ public class Camera extends AppCompatActivity {
             return fragment;
         }
 
+
+        public void turnOnFlashLight(){
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    cameraManager.setTorchMode(mCameraId, true);
+//                    mTorchOnOffButton.setImageResource(R.drawable.on);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void turnOffFlashLight(){
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    cameraManager.setTorchMode(mCameraId, false);
+//                    mTorchOnOffButton.setImageResource(R.drawable.on);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -167,7 +191,17 @@ public class Camera extends AppCompatActivity {
             captureButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    return;
+                    try {
+                        if (isTorchOn) {
+                            turnOffFlashLight();
+                            isTorchOn = false;
+                        } else {
+                            turnOnFlashLight();
+                            isTorchOn = true;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -176,7 +210,7 @@ public class Camera extends AppCompatActivity {
             toggleFlashBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                    CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
+//                    cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
                     try {
                         for (String cameraId : cameraManager.getCameraIdList()) {
                             CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
@@ -187,10 +221,10 @@ public class Camera extends AppCompatActivity {
                             //cameraManager.setTorchMode(cameraId, true);
                             if (isChecked) {
                                 Toast.makeText(getActivity(), "flash is on", Toast.LENGTH_LONG).show();
-//                                cameraManager.setTorchMode(cameraId, true);
+                                cameraManager.setTorchMode(cameraId, true);
                             } else {
                                 Toast.makeText(getActivity(), "flash is off", Toast.LENGTH_LONG).show();
-//                                cameraManager.setTorchMode(cameraId, false);
+                                cameraManager.setTorchMode(cameraId, false);
                             }
                         }
                     }catch(CameraAccessException e){
@@ -290,10 +324,10 @@ public class Camera extends AppCompatActivity {
             }
         }
 
-        private  void setupCamera(int width, int height) {
-            CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
+        private void setupCamera(int width, int height) {
+            cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
             try {
-                for (String cameraId : cameraManager.getCameraIdList()) {
+                for (final String cameraId : cameraManager.getCameraIdList()) {
                     CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
                     if(cameraCharacteristics.get(cameraCharacteristics.LENS_FACING) ==
                             CameraCharacteristics.LENS_FACING_FRONT){
@@ -320,7 +354,7 @@ public class Camera extends AppCompatActivity {
         }
 
         private void connectCamera() {
-            CameraManager cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
+            cameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
             try {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) ==

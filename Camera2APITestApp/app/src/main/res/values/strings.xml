@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Maze Solver Camera</string>
+    <string name="app_name">Maze Solver</string>
     <string name="take_picture">Capture &amp; Solve</string>
 </resources>
