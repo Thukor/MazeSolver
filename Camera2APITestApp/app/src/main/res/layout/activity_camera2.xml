@@ -32,7 +32,7 @@
         app:srcCompat="@drawable/apps" />
 
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/btn_flash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/btn_takepicture"

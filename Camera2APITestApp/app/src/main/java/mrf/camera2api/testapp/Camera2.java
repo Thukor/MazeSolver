@@ -1,10 +1,8 @@
 package mrf.camera2api.testapp;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
@@ -19,11 +17,13 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -33,6 +33,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -49,6 +50,7 @@ public class Camera2 extends AppCompatActivity {
     private static final String TAG = "AndroidCameraApi";
     private Button takePictureButton;
     private ImageButton mBtLaunchActivity;
+    private ImageButton toggleFlashButton;
     private TextureView textureView;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
@@ -57,8 +59,8 @@ public class Camera2 extends AppCompatActivity {
         ORIENTATIONS.append(Surface.ROTATION_180, 270);
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
-    private String cameraId;
     protected CameraDevice cameraDevice;
+    public static CameraManager cameraManager;
     protected CameraCaptureSession cameraCaptureSessions;
     protected CaptureRequest captureRequest;
     protected CaptureRequest.Builder captureRequestBuilder;
@@ -66,9 +68,16 @@ public class Camera2 extends AppCompatActivity {
     private ImageReader imageReader;
     private File file;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
-    private boolean mFlashSupported;
+    private boolean hasFlash;
+    private boolean isFlashOn = false;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
+    public static final String CAMERA_FRONT = "1";
+    public static final String CAMERA_BACK = "0";
+
+    private String cameraId = CAMERA_BACK;
+    private boolean isFlashSupported;
+    private boolean isTorchOn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -98,9 +107,91 @@ public class Camera2 extends AppCompatActivity {
                 launchActivity();
             }
         });
+
+        toggleFlashButton = (ImageButton) findViewById(R.id.btn_flash);
+        assert toggleFlashButton != null;
+        toggleFlashButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                actionFlash();
+
+                switchFlash();
+            }
+        });
+    }
+    private void  actionFlash() {
+        CameraManager mCameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        try {
+            String mCameraId = mCameraManager.getCameraIdList()[0];
+            if (mCameraId.equals("1")) {    // currently on back camera
+                if (!isFlashOn) {  // if flash light was OFF
+                    // Turn ON flash light
+                    try {
+                        mCameraManager.setTorchMode(mCameraId, true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    // Change isFlashOn boolean value
+                    isFlashOn = true;
+
+                } else { // if flash light was ON
+                    // Turn OFF flash light
+                    try {
+                        mCameraManager.setTorchMode(mCameraId, false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    // Change isFlashOn boolean value
+                    isFlashOn = false;
+                    // Change button icon
+                }
+            }
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+            finish();
+        }
+    }
+    public void switchFlash() {
+        try {
+            if (cameraId.equals(CAMERA_BACK)) {
+                if (isFlashSupported) {
+                    if (isTorchOn) {
+                        captureRequestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+                        cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), null, null);
+                        isTorchOn = false;
+                    } else {
+                        captureRequestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+                        cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), null, null);
+                        isTorchOn = true;
+                    }
+                }
+            }
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+    public void setupFlashButton() {
+        if (cameraId.equals(CAMERA_BACK) && isFlashSupported) {
+            toggleFlashButton.setVisibility(View.VISIBLE);
+
+        } else {
+            toggleFlashButton.setVisibility(View.GONE);
+        }
     }
     private void launchActivity() {
-
+        try {
+            if (cameraId.equals(CAMERA_BACK)) {
+                if (isFlashSupported) {
+                    if (isTorchOn) {
+                        captureRequestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+                        cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), null, null);
+                        isTorchOn = false;
+                    }
+                }
+            }
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
         Intent intent = new Intent(this, Gallery.class);
         startActivity(intent);
     }
@@ -308,6 +399,10 @@ public class Camera2 extends AppCompatActivity {
                 ActivityCompat.requestPermissions(Camera2.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA_PERMISSION);
                 return;
             }
+            Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+            isFlashSupported = available == null ? false : available;
+
+            setupFlashButton();
             manager.openCamera(cameraId, stateCallback, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
