@@ -36,6 +36,7 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 			maze_image = info[1]
 			self._set_headers(maze_image)
 		if "/hello" in self.path:
+			self._set_hello_header()
 			
 
 	def do_POST(self):
