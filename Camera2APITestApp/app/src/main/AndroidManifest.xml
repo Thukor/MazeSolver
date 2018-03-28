@@ -34,7 +34,8 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
         </activity>
-        <activity android:name=".CornerActivity"></activity>
+        <activity android:name=".CornerActivity" />
+        <activity android:name=".Splash"></activity>
     </application>
 
 </manifest>

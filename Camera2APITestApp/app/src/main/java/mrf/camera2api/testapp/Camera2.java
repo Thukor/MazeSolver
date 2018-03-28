@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Camera2 extends AppCompatActivity {
     private static final String TAG = "AndroidCameraApi";
@@ -74,7 +75,7 @@ public class Camera2 extends AppCompatActivity {
     private HandlerThread mBackgroundThread;
     public static final String CAMERA_FRONT = "1";
     public static final String CAMERA_BACK = "0";
-
+    public File lastFile;
     private String cameraId = CAMERA_BACK;
     private boolean isFlashSupported;
     private boolean isTorchOn;
@@ -93,9 +94,14 @@ public class Camera2 extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     takePicture();
+                    TimeUnit.SECONDS.sleep(1);
+                    launchCornerActivity();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+
             }
         });
         mBtLaunchActivity = (ImageButton) findViewById(R.id.btn_gallery);
@@ -104,7 +110,7 @@ public class Camera2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                launchActivity();
+                launchGalleryActivity();
             }
         });
 
@@ -113,44 +119,12 @@ public class Camera2 extends AppCompatActivity {
         toggleFlashButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                actionFlash();
 
                 switchFlash();
             }
         });
     }
-    private void  actionFlash() {
-        CameraManager mCameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        try {
-            String mCameraId = mCameraManager.getCameraIdList()[0];
-            if (mCameraId.equals("1")) {    // currently on back camera
-                if (!isFlashOn) {  // if flash light was OFF
-                    // Turn ON flash light
-                    try {
-                        mCameraManager.setTorchMode(mCameraId, true);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    // Change isFlashOn boolean value
-                    isFlashOn = true;
 
-                } else { // if flash light was ON
-                    // Turn OFF flash light
-                    try {
-                        mCameraManager.setTorchMode(mCameraId, false);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    // Change isFlashOn boolean value
-                    isFlashOn = false;
-                    // Change button icon
-                }
-            }
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-            finish();
-        }
-    }
     public void switchFlash() {
         try {
             if (cameraId.equals(CAMERA_BACK)) {
@@ -178,7 +152,24 @@ public class Camera2 extends AppCompatActivity {
             toggleFlashButton.setVisibility(View.GONE);
         }
     }
-    private void launchActivity() {
+    private void launchCornerActivity() {
+        try {
+            if (cameraId.equals(CAMERA_BACK)) {
+                if (isFlashSupported) {
+                    if (isTorchOn) {
+                        captureRequestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+                        cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), null, null);
+                        isTorchOn = false;
+                    }
+                }
+            }
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+        Intent intent = new Intent(this, CornerActivity.class);
+        startActivity(intent);
+    }
+    private void launchGalleryActivity() {
         try {
             if (cameraId.equals(CAMERA_BACK)) {
                 if (isFlashSupported) {
@@ -266,7 +257,7 @@ public class Camera2 extends AppCompatActivity {
             if (characteristics != null) {
                 jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP).getOutputSizes(ImageFormat.JPEG);
             }
-            int width = 640;
+            int width = 480;
             int height = 480;
             if (jpegSizes != null && 0 < jpegSizes.length) {
                 width = jpegSizes[0].getWidth();
@@ -284,6 +275,7 @@ public class Camera2 extends AppCompatActivity {
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
 //            final File file = new File(Environment.getExternalStorageDirectory()+"/MazeSolver/nude.jpg");
             final File file = createImageFileName();
+            lastFile = file;
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
@@ -341,6 +333,8 @@ public class Camera2 extends AppCompatActivity {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+
+
     }
     private File createImageFileName() throws IOException {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
