@@ -9,7 +9,12 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 	def _set_headers_for_simple_acknowledgement(self):
 		self.send_response(200)
 		self.end_headers()
-
+	def _set_hello_header(self):
+		self.send_response(200)
+		self.send_header("Content-type", "text")
+		self.end_headers()
+		self.wfile.write("Hello!".encode())
+	
 	def _set_headers_for_send_image(self,image_name):
 		image = open(image_name, 'rb')
 		self.send_response(200)
@@ -30,6 +35,8 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 			info = self.path[1:].split("/")
 			maze_image = info[1]
 			self._set_headers(maze_image)
+		if "/hello" in self.path:
+			
 
 	def do_POST(self):
 		if "/solve" in self.path:
