@@ -1,7 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
 import os
-import processing
 from MazeSolutionFinder import *
 
 class MazeSolverRequestHandler(BaseHTTPRequestHandler):
