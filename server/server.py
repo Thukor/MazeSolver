@@ -34,7 +34,11 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 			maze_image = info[1]
 			self._set_headers(maze_image)
 		if "/hello" in self.path:
+<<<<<<< HEAD
 			print("GOT REQUEST")
+=======
+			print("GOT A REQUEST")
+>>>>>>> e27739924fdc17abc599639653eb18abc03d7ba4
 			self._set_hello_header()
 			
 
