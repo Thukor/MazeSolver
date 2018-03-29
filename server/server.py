@@ -45,5 +45,5 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
 	server_class = HTTPServer
-	httpd = server_class(("localhost", 80), MazeSolverRequestHandler)
+	httpd = server_class(("localhost", 22), MazeSolverRequestHandler)
 	httpd.serve_forever()
