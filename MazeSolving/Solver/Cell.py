@@ -28,21 +28,26 @@ class Cell:
 	def __repr__(self):
 		return str(self)
 
+	def __lt__(self, other):
+		if self.row != other.row:
+			return self.row < other.row
+		return self.column < other.column
+
 	@property 
 	def has_north_wall(self):
 		return self.wall_value % 2 == 1
 
 	@property 
 	def has_east_wall(self):
-		return self.wall_value in {4,5,6,7,12,14,15}
+		return self.wall_value in {4,5,6,7,12,13,14,15}
 
 	@property 
 	def has_south_wall(self):
-		return self.wall_value in {8,9,10,11,12,14,5}
+		return self.wall_value in {8,9,10,11,12,14,13,15}
 
 	@property 
 	def has_west_wall(self):
-		return self.wall_value in {2,3,6,10,7,14,15}
+		return self.wall_value in {2,3,6,10,11,7,14,15}
 
 	@property
 	def is_possible_start(self):

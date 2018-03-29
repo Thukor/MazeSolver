@@ -10,7 +10,14 @@ class MazeJsonManager:
 	@staticmethod
 	def load_cell_table(filename):
 		with open(filename, 'r') as jfp:
-			return json.load(jfp)
+			table = json.load(jfp)
+			new_table = defaultdict(dict)
+
+			for key in table.keys():
+				for other_key in table[key].keys():
+					new_table[int(key)][int(other_key)] = table[key][other_key]
+
+			return new_table
 
 	@staticmethod
 	def dump_maze_and_solution_path(maze, solution, filename):
@@ -35,3 +42,23 @@ class MazeJsonManager:
 		total_table["solution"] = solution_path
 
 		MazeJsonManager.dump_cell_table(total_table, filename)
+
+
+	@staticmethod
+	def table_from_csv(filename):
+
+		table = defaultdict(dict)
+
+		with open(filename) as f:
+
+			number_matrix = []
+
+			for line in f:
+				numbers = [int(n) for n in line.strip().split(',')]
+				number_matrix.append(numbers)
+
+			for i in range(len(number_matrix)):
+				for j in range(len(number_matrix[0])):
+					table[i][j] = number_matrix[i][j]
+
+		MazeJsonManager.dump_cell_table(table, "table.json")
