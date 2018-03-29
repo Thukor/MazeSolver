@@ -28,7 +28,7 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 		with open("maze_solution.png", 'wb') as ms:
 			#need a table to image dumper
 			ms.write(image)
-		self._set_headers_for_send_image("maze_solution.png")
+		self._set_headers_for_send_image("tiny_maze.png")
 
 	def do_GET(self):
 		if "/solutions" in self.path:
