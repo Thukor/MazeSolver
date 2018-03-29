@@ -123,6 +123,8 @@ public class Camera2 extends AppCompatActivity {
                 switchFlash();
             }
         });
+        Intent intent = new Intent(this, Splash.class);
+        startActivity(intent);
     }
 
     public void switchFlash() {

@@ -33,9 +33,12 @@
         <activity android:name=".Gallery">
             android:configChanges="orientation"
             android:screenOrientation="portrait"
+
         </activity>
         <activity android:name=".CornerActivity" />
-        <activity android:name=".Splash"></activity>
+        <activity android:name=".Splash">
+
+        </activity>
     </application>
 
 </manifest>
