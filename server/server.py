@@ -20,11 +20,10 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 	
 	def _set_headers_for_send_image(self,image_name):
 		image = open(image_name, 'rb')
-		print(image.read())
 		self.send_response(200)
 		self.send_header("Content-type", "image/jpeg")
 		self.end_headers()
-		self.wfile.write(image.read())
+		self.wfile.write(base64.b64encode(image.read()))
 
 	def _solve_maze(self):
 		content_length = int(self.headers['Content-Length'])
