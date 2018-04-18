@@ -48,37 +48,89 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Camera2 extends AppCompatActivity {
+    public static final String CAMERA_FRONT = "1";
+    public static final String CAMERA_BACK = "0";
     private static final String TAG = "AndroidCameraApi";
-    private Button takePictureButton;
-    private ImageButton mBtLaunchActivity;
-    private ImageButton toggleFlashButton;
-    private TextureView textureView;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+    private static final int REQUEST_CAMERA_PERMISSION = 200;
+    public static CameraManager cameraManager;
+
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
         ORIENTATIONS.append(Surface.ROTATION_180, 270);
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
+
+    public File lastFile;
     protected CameraDevice cameraDevice;
-    public static CameraManager cameraManager;
     protected CameraCaptureSession cameraCaptureSessions;
     protected CaptureRequest captureRequest;
     protected CaptureRequest.Builder captureRequestBuilder;
+    private Button takePictureButton;
+    private ImageButton mBtLaunchActivity;
+    private ImageButton toggleFlashButton;
+    private TextureView textureView;
     private Size imageDimension;
     private ImageReader imageReader;
     private File file;
-    private static final int REQUEST_CAMERA_PERMISSION = 200;
     private boolean hasFlash;
     private boolean isFlashOn = false;
     private Handler mBackgroundHandler;
+    private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
+        @Override
+        public void onOpened(CameraDevice camera) {
+            //This is called when the camera is open
+            Log.e(TAG, "onOpened");
+            cameraDevice = camera;
+            createCameraPreview();
+        }
+
+        @Override
+        public void onDisconnected(CameraDevice camera) {
+            cameraDevice.close();
+        }
+
+        @Override
+        public void onError(CameraDevice camera, int error) {
+            cameraDevice.close();
+            cameraDevice = null;
+        }
+    };
+    final CameraCaptureSession.CaptureCallback captureCallbackListener = new CameraCaptureSession.CaptureCallback() {
+        @Override
+        public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
+            super.onCaptureCompleted(session, request, result);
+            Toast.makeText(Camera2.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
+            createCameraPreview();
+        }
+    };
     private HandlerThread mBackgroundThread;
-    public static final String CAMERA_FRONT = "1";
-    public static final String CAMERA_BACK = "0";
-    public File lastFile;
     private String cameraId = CAMERA_BACK;
     private boolean isFlashSupported;
+    TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
+        @Override
+        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+            //open your camera here
+            openCamera();
+        }
+
+        @Override
+        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+            // Transform you image captured size according to the surface width and height
+        }
+
+        @Override
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+            return false;
+        }
+
+        @Override
+        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+        }
+    };
     private boolean isTorchOn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -146,6 +198,7 @@ public class Camera2 extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     public void setupFlashButton() {
         if (cameraId.equals(CAMERA_BACK) && isFlashSupported) {
             toggleFlashButton.setVisibility(View.VISIBLE);
@@ -154,6 +207,7 @@ public class Camera2 extends AppCompatActivity {
             toggleFlashButton.setVisibility(View.GONE);
         }
     }
+
     private void launchCornerActivity() {
         try {
             if (cameraId.equals(CAMERA_BACK)) {
@@ -171,6 +225,7 @@ public class Camera2 extends AppCompatActivity {
         Intent intent = new Intent(this, CornerActivity.class);
         startActivity(intent);
     }
+
     private void launchGalleryActivity() {
         try {
             if (cameraId.equals(CAMERA_BACK)) {
@@ -188,55 +243,13 @@ public class Camera2 extends AppCompatActivity {
         Intent intent = new Intent(this, Gallery.class);
         startActivity(intent);
     }
-    TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
-        @Override
-        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            //open your camera here
-            openCamera();
-        }
-        @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-            // Transform you image captured size according to the surface width and height
-        }
-        @Override
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            return false;
-        }
-        @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        }
-    };
-    private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
-        @Override
-        public void onOpened(CameraDevice camera) {
-            //This is called when the camera is open
-            Log.e(TAG, "onOpened");
-            cameraDevice = camera;
-            createCameraPreview();
-        }
-        @Override
-        public void onDisconnected(CameraDevice camera) {
-            cameraDevice.close();
-        }
-        @Override
-        public void onError(CameraDevice camera, int error) {
-            cameraDevice.close();
-            cameraDevice = null;
-        }
-    };
-    final CameraCaptureSession.CaptureCallback captureCallbackListener = new CameraCaptureSession.CaptureCallback() {
-        @Override
-        public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
-            super.onCaptureCompleted(session, request, result);
-            Toast.makeText(Camera2.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
-            createCameraPreview();
-        }
-    };
+
     protected void startBackgroundThread() {
         mBackgroundThread = new HandlerThread("Camera Background");
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
     }
+
     protected void stopBackgroundThread() {
         mBackgroundThread.quitSafely();
         try {
@@ -247,8 +260,9 @@ public class Camera2 extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    protected void takePicture() throws IOException{
-        if(null == cameraDevice) {
+
+    protected void takePicture() throws IOException {
+        if (null == cameraDevice) {
             Log.e(TAG, "cameraDevice is null");
             return;
         }
@@ -298,6 +312,7 @@ public class Camera2 extends AppCompatActivity {
                         }
                     }
                 }
+
                 private void save(byte[] bytes) throws IOException {
                     OutputStream output = null;
                     try {
@@ -328,6 +343,7 @@ public class Camera2 extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onConfigureFailed(CameraCaptureSession session) {
                 }
@@ -338,6 +354,7 @@ public class Camera2 extends AppCompatActivity {
 
 
     }
+
     private File createImageFileName() throws IOException {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String prepend = "MAZE_" + timestamp + "_";
@@ -353,6 +370,7 @@ public class Camera2 extends AppCompatActivity {
         }
         return mImageFolder;
     }
+
     protected void createCameraPreview() {
         try {
             SurfaceTexture texture = textureView.getSurfaceTexture();
@@ -361,7 +379,7 @@ public class Camera2 extends AppCompatActivity {
             Surface surface = new Surface(texture);
             captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             captureRequestBuilder.addTarget(surface);
-            cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback(){
+            cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback() {
                 @Override
                 public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
                     //The camera is already closed
@@ -372,6 +390,7 @@ public class Camera2 extends AppCompatActivity {
                     cameraCaptureSessions = cameraCaptureSession;
                     updatePreview();
                 }
+
                 @Override
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
                     Toast.makeText(Camera2.this, "Configuration change", Toast.LENGTH_SHORT).show();
@@ -381,6 +400,7 @@ public class Camera2 extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     private void openCamera() {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         Log.e(TAG, "is camera open");
@@ -405,8 +425,9 @@ public class Camera2 extends AppCompatActivity {
         }
         Log.e(TAG, "openCamera X");
     }
+
     protected void updatePreview() {
-        if(null == cameraDevice) {
+        if (null == cameraDevice) {
             Log.e(TAG, "updatePreview error, return");
         }
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
@@ -416,6 +437,7 @@ public class Camera2 extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     private void closeCamera() {
         if (null != cameraDevice) {
             cameraDevice.close();
@@ -426,6 +448,7 @@ public class Camera2 extends AppCompatActivity {
             imageReader = null;
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
@@ -436,6 +459,7 @@ public class Camera2 extends AppCompatActivity {
             }
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -447,6 +471,7 @@ public class Camera2 extends AppCompatActivity {
             textureView.setSurfaceTextureListener(textureListener);
         }
     }
+
     @Override
     protected void onPause() {
         Log.e(TAG, "onPause");

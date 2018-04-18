@@ -23,9 +23,6 @@ public class CornerActivity extends AppCompatActivity {
         File mImageFolder = new File(imgDir, "MazeSolver");
         File imgFile = lastFileModified(mImageFolder.toString());
 
-//        File mImageChild = new File(mImageFolder,"kms.jpg");
-//        File imgFile = new  File("/zz/Images/test_image.jpg");
-
         if(imgFile.exists()){
             Matrix matrix = new Matrix();
             matrix.postRotate(90);
