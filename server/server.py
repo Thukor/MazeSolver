@@ -26,7 +26,7 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 
 	def _solve_maze(self):
 		content_length = int(self.headers['Content-Length'])
-		image = self.rfile.read(content_length)[:-1]
+		image = self.rfile.read(content_length)[:-2]
 		
 		with open("maze.jpg", 'wb') as ms:
 			ms.write(image)
