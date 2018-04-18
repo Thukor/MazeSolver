@@ -2,7 +2,7 @@ import cv2
 import imutils
 import numpy as np
 
-from mouse_click import define_points
+# from mouse_click import define_points
 
 
 def ordered_points(pts):
