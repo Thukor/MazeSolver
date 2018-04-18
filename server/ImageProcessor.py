@@ -7,4 +7,4 @@ class ImageProcessor:
 
 	def process_image(image_name, number):
 		birdseye_correct(image, number)
-		image_segmentation(f"warped{number}.png")
+		image_segmentation("warped" + str(number) + ".png")
