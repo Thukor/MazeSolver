@@ -5,13 +5,13 @@ import numpy as np
 class MouseClicks:
     """Class for mouse click events"""
     corners  = []
-    ref_pnt = []
+    ref_pt = []
 
     def __init__(self):
         self.data = []
 
-    def draw_circle(event,x,y,flags,param):
-        """Draws circles in the image to represent input points
+    def draw_point(event,x,y,flags,param):
+        """Draw point in the image to represent input points
 
         Keyword arguments:
         event --
@@ -20,11 +20,10 @@ class MouseClicks:
         flags --
         param --
         """
-        global ref_pnt
         if event == cv2.EVENT_LBUTTONDBLCLK:
             cv2.circle(param,(x,y),5,(255,0,0),-1)
-            ref_pnt = [x,y]
-            print(type(ref_pnt))
+            ref_pt = [x,y]
+            print(type(ref_pt))
             corners.append(ref_pnt)
 
     def define_points(target_img):
@@ -37,7 +36,7 @@ class MouseClicks:
         """
         # Open a window of for target_img in order to maunally input points
         cv2.namedWindow('image')
-        cv2.setMouseCallback('image',draw_circle, target_img)
+        cv2.setMouseCallback('image',draw_point, target_img)
         while(1):
             cv2.imshow('image',target_img)
             # When esc is pressed, exit window for manually inputting point
