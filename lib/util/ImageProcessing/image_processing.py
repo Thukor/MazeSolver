@@ -1,48 +1,61 @@
 import cv2
-import numpy as np
 import imutils
-# from collections import defaultdict
+import numpy as np
+
 from mouse_click import define_points
 
 
 def ordered_points(pts):
-	# initialzie a list of coordinates that will be ordered
-	# such that the first entry in the list is the top-left,
-	# the second entry is the top-right, the third is the
-	# bottom-right, and the fourth is the bottom-left
+	"""Create an np array (list) of the input coordinates ordered as top left,
+	   top right, bottom right, and then bottom left.
+
+	   Keyword arguments:
+	   pts -- list of manually selected points from an image which represents
+	   		  the corners of a rectangular shape in the real world
+	"""
 	rect = np.zeros((4, 2), dtype = "float32")
 
-	# the top-left point will have the smallest sum, whereas
-	# the bottom-right point will have the largest sum
-	s = pts.sum(axis = 1)
-	rect[0] = pts[np.argmin(s)]
-	rect[2] = pts[np.argmax(s)]
+	pt_sum = pts.sum(axis = 1)
+	# Represents the top left corner
+	rect[0] = pts[np.argmin(pt_sum)]
+	# Represents the bottom right corner
+	rect[2] = pts[np.argmax(pt_sum)]
 
-	# now, compute the difference between the points, the
-	# top-right point will have the smallest difference,
-	# whereas the bottom-left will have the largest difference
 	diff = np.diff(pts, axis = 1)
+	# Represents the top right corner
 	rect[1] = pts[np.argmin(diff)]
+	# Represents the bottom left corner
 	rect[3] = pts[np.argmax(diff)]
 
-	# return the ordered coordinates
 	return rect
 
-def birdseye_correction(img = "angled.jpg"):
+def birdseye_correction(img, i):
+	"""Use homography to transform an image from an angled perspective to a
+	   rectified image.
+
+	Keyword arguments:
+	img -- a string that represents the image path and name
+
+	TODO:
+	- Make is so we read in the corners from the app (client)
+	- Find a way to make dimensions of the image with its actual proportions
+	"""
     img = cv2.imread(img,0)
+
     resized = imutils.resize(img, height = 750)
     copy = resized.copy()
 
     rect = ordered_points(define_points(copy))
-    print (rect)
     (tl, tr, br, bl) = rect
 
-	# compute the width of the new image, which will be the
-	# maximum distance between bottom-right and bottom-left
-	# x-coordiates or the top-right and top-left x-coordinates
-    widthA = np.sqrt(((br[0]-bl[0])**2)+((br[1]-bl[1])**2))
-    widthB = np.sqrt(((tr[0]-tl[0])**2)+((tr[1]-tl[1])**2))
-    maxWidth = max(int(widthA), int(widthB))
+
+	# Computer width of warped image, which is either the max distance between
+	# the top left and top right corners or the bottom left and bottom right
+	# corners (considering only x coordinates)
+    widthTop = np.sqrt(((tr[0]-tl[0])**2)+((tr[1]-tl[1])**2))
+    widthBottom = np.sqrt(((br[0]-bl[0])**2)+((br[1]-bl[1])**2))
+
+    maxWidth = max(int(widthTop), int(widthBottom))
 
     # compute the height of the new image, which will be the
     # maximum distance between the top-right and bottom-right
@@ -79,44 +92,42 @@ def birdseye_correction(img = "angled.jpg"):
     inverted = cv2.bitwise_not(eroded)
     colorImg = cv2.cvtColor(inverted, cv2.COLOR_GRAY2RGB)
 
+	filename = "warped" + i + ".png"
+
     cv2.imwrite("warped.png", colorImg)
 
 
-def image_segmentation(img = "warped.png"):
+def image_segmentation(img, i):
+	"""Solve maze image using image segmentation
+
+	Keyword arguments:
+	img -- Maze image to be solved
+		   Will only work with perfect mazes (enclosed walls with only
+		   two outer openings)
+
+	@TODO: Get rid of "warped.png"
+	"""
     img = cv2.imread(img,0)
     resized = imutils.resize(img, height = 500)
     copy = resized.copy()
 
     copy_color = cv2.cvtColor(copy, cv2.COLOR_GRAY2RGB)
 
+	# Binarizing images for image segmentation
     binary = cv2.adaptiveThreshold(resized,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
                 cv2.THRESH_BINARY,101,2)
-
-    denoised = cv2.fastNlMeansDenoising(binary,None,21,21)
-
 
     inverted = cv2.bitwise_not(binary)
     im2, contours, hierarchy = cv2.findContours(inverted,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)
 
-    cv2.imshow("solution?", inverted)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
-    print("How many:", len(contours))
-
+	# Finding all paths in the maze
     path = np.zeros_like(binary)
     cv2.drawContours(path, contours, 0, (255,255,255), -1)
 
-    cv2.imshow("contours", path)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
+	# Separates the two groups of enclosed walls and finds the seam between
+	# them (this is the actual solution path).
     kernel = np.ones((30,30),np.uint8)
     path = cv2.dilate(path, kernel)
-
-    cv2.imshow("path", path)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
 
     eroded = cv2.erode(path, kernel)
 
@@ -139,20 +150,22 @@ def image_segmentation(img = "warped.png"):
     # Now black-out the area of logo in ROI
     img1_bg = cv2.bitwise_and(roi,roi,mask = mask_inv)
 
-    # Take only region of logo from logo image.
+    # Take only the maze solution path
     img2_fg = cv2.bitwise_and(colorImg,colorImg,mask = mask)
 
     # Put solution path in ROI and modify the copy image
     final = cv2.add(img1_bg,img2_fg)
     copy_color[0:rows, 0:cols ] = final
 
-    cv2.imwrite("solution.jpg", copy_color)
+	filename = "solution" + i + ".jpg"
+
+    cv2.imwrite(filename, copy_color)
 
 
-
-def main():
-    birdseye_correction()
-    image_segmentation()
-
-if __name__ == "__main__":
-    main()
+#
+# def main():
+#     birdseye_correction()
+#     image_segmentation()
+#
+# if __name__ == "__main__":
+#     main()
