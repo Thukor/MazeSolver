@@ -43,8 +43,8 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 			print("GOT A REQUEST")
 			self._set_hello_header()
 			
-
 	def do_POST(self):
+		print(self.path)
 		if "/solve" in self.path:
 			print("WE GOT AN IMAGE GUYS!!!!!")
 			self._solve_maze()
