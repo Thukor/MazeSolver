@@ -45,7 +45,7 @@ def birdseye_correction(img, i):
     resized = imutils.resize(img, height = 750)
     copy = resized.copy()
 
-    rect = ordered_points(define_points(copy))
+    # rect = ordered_points(define_points(copy))
     (tl, tr, br, bl) = rect
 
 
