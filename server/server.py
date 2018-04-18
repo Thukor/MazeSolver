@@ -23,6 +23,7 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 		self.send_response(200)
 		self.send_header("Content-type", "image/jpeg")
 		self.end_headers()
+		print(base64.b64encode(image.read()))
 		self.wfile.write(base64.b64encode(image.read()))
 
 	def _solve_maze(self):
