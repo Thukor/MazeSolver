@@ -46,6 +46,7 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 
 	def do_POST(self):
 		if "/solve" in self.path:
+			print("WE GOT AN IMAGE GUYS!!!!!")
 			self._solve_maze()
 		if "/demo" in self.path:
 			content_length = int(self.headers['Content-Length'])
