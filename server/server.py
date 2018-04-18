@@ -35,6 +35,7 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 		self._set_headers_for_send_image("solution.png")
 
 	def do_GET(self):
+		print("GET" + str(self.path))
 		if "/solutions" in self.path:
 			info = self.path[1:].split("/")
 			maze_image = info[1]
