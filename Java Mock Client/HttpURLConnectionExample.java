@@ -29,7 +29,7 @@ public class HttpURLConnectionExample {
 	{
 
 		//encode image to Base64 String
-		File f = new File("image.png");		//change path of image according to you
+		File f = new File("maze_square_medium.jpg");		//change path of image according to you
 		FileInputStream fis = new FileInputStream(f);
 		byte byteArray[] = new byte[(int)f.length()];
 		fis.read(byteArray);
@@ -54,7 +54,7 @@ public class HttpURLConnectionExample {
 	// HTTP GET request
 	private void sendGet() throws Exception {
 
-		String url = "http://72.224.10.212:8080/hello";
+		String url = "http://72.224.10.212:1080/hello";
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -87,7 +87,7 @@ public class HttpURLConnectionExample {
 	// HTTP POST request
 	private void sendPost(String urlParameters) throws Exception {
 
-		String url = "http://72.224.10.212:8080/solve";
+		String url = "http://72.224.10.212:1080/solve";
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 

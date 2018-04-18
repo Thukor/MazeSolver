@@ -92,7 +92,7 @@ def birdseye_correction(img, i):
     inverted = cv2.bitwise_not(eroded)
     colorImg = cv2.cvtColor(inverted, cv2.COLOR_GRAY2RGB)
 
-	filename = "warped" + i + ".png"
+	filename = "warped" + str(i) + ".png"
 
     cv2.imwrite("warped.png", colorImg)
 
@@ -157,7 +157,7 @@ def image_segmentation(img, i):
     final = cv2.add(img1_bg,img2_fg)
     copy_color[0:rows, 0:cols ] = final
 
-	filename = "solution" + i + ".jpg"
+	filename = "solution" + str(i) + ".jpg"
 
     cv2.imwrite(filename, copy_color)
 

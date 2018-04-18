@@ -20,7 +20,7 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 	def _set_headers_for_send_image(self,image_name):
 		image = open(image_name, 'rb')
 		self.send_response(200)
-		self.send_header("Content-type", "image/png")
+		self.send_header("Content-type", "image/jpg")
 		self.end_headers()
 		self.wfile.write(image.read())
 
@@ -28,11 +28,11 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 		content_length = int(self.headers['Content-Length'])
 		image = self.rfile.read(content_length)
 		
-		with open("maze.png", 'wb') as ms:
+		with open("maze.jpg", 'wb') as ms:
 			ms.write(image)
 
-		image_solver = ImageProcessor.process_image("maze.png", 4)
-		self._set_headers_for_send_image("solution.png")
+		image_solver = ImageProcessor.process_image("maze.jpg", 4)
+		self._set_headers_for_send_image("solution.jpg")
 
 	def do_GET(self):
 		print("GET" + str(self.path))
