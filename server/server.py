@@ -20,14 +20,14 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 	def _set_headers_for_send_image(self,image_name):
 		image = open(image_name, 'rb')
 		self.send_response(200)
-		self.send_header("Content-type", "image/jpg")
+		self.send_header("Content-type", "image/jpeg")
 		self.end_headers()
 		self.wfile.write(image.read())
 
 	def _solve_maze(self):
 		content_length = int(self.headers['Content-Length'])
 		image = self.rfile.read(content_length)
-		
+		print(content_length)
 		with open("maze.jpg", 'wb') as ms:
 			ms.write(image)
 
@@ -49,13 +49,13 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 		if "/solve" in self.path:
 			print("WE GOT AN IMAGE GUYS!!!!!")
 			self._solve_maze()
-		if "/demo" in self.path:
-			content_length = int(self.headers['Content-Length'])
-			image = self.rfile.read(content_length)
-			table = MazeJsonManager.load_cell_table("table.json")
-			pprint("GOT TABLE\n")
-			pprint(table)
-			self._set_headers_for_send_image("maze_output.png")			
+		# if "/demo" in self.path:
+		# 	content_length = int(self.headers['Content-Length'])
+		# 	image = self.rfile.read(content_length)
+		# 	table = MazeJsonManager.load_cell_table("table.json")
+		# 	pprint("GOT TABLE\n")
+		# 	pprint(table)
+		# 	self._set_headers_for_send_image("maze_output.png")			
 
 
 if __name__ == "__main__":
