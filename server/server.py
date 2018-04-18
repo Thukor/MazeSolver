@@ -4,6 +4,7 @@ import os
 from pprint import pprint
 from MazeJsonManager import *
 from ImageProcessor import *
+import base64
 
 class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 
@@ -26,9 +27,9 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 
 	def _solve_maze(self):
 		content_length = int(self.headers['Content-Length'])
-		image = self.rfile.read(content_length)
-		print(image)
-		with open("maze.txt", 'wb') as ms:
+		image = self.rfile.read(content_length).decode('base64s')
+
+		with open("maze.jpg", 'wb') as ms:
 			ms.write(image)
 
 		image_solver = ImageProcessor.process_image("maze.jpg", 4)
