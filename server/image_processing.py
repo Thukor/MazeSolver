@@ -171,7 +171,7 @@ def image_segmentation(img, i):
 
     filename = "solution" + str(i) + ".jpg"
 
-    cv2.imwrite(filename, copy)
+    cv2.imwrite("solution.jpg", copy)
 
 #
 # def main():
