@@ -3,12 +3,14 @@ import logging
 import os
 from pprint import pprint
 from MazeJsonManager import *
+from ImageProcessor import *
 
 class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 
 	def _set_headers_for_simple_acknowledgement(self):
 		self.send_response(200)
 		self.end_headers()
+
 	def _set_hello_header(self):
 		self.send_response(200)
 		self.send_header("Content-type", "text")
@@ -25,10 +27,12 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 	def _solve_maze(self):
 		content_length = int(self.headers['Content-Length'])
 		image = self.rfile.read(content_length)
-		with open("maze_solution.png", 'wb') as ms:
-			#need a table to image dumper
+		
+		with open("maze.png", 'wb') as ms:
 			ms.write(image)
-		self._set_headers_for_send_image("maze_solution.png")
+
+		image_solver = ImageProcessor.process_image("maze.png", 4)
+		self._set_headers_for_send_image("solution.png")
 
 	def do_GET(self):
 		if "/solutions" in self.path:
