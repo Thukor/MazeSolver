@@ -20,6 +20,7 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 	
 	def _set_headers_for_send_image(self,image_name):
 		image = open(image_name, 'rb')
+		print(image)
 		self.send_response(200)
 		self.send_header("Content-type", "image/jpeg")
 		self.end_headers()
