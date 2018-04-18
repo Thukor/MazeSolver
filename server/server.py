@@ -23,8 +23,8 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 		self.send_response(200)
 		self.send_header("Content-type", "image/jpeg")
 		self.end_headers()
-		print(base64.b64encode(image.read()))
-		self.wfile.write(base64.b64encode(image.read()))
+		img_bytes = base64.b64encode(image.read())
+		self.wfile.write(img_bytes)
 
 	def _solve_maze(self):
 		content_length = int(self.headers['Content-Length'])
