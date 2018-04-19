@@ -46,7 +46,7 @@ def remove_excess_red(img):
 
             color = tuple(soln_copy[i,j])
 
-            if color == (255,255,0):
+            if color == (0,0,254):
                 red_pixels.append((i,j))
     print(red_pixels)
     pixels_to_make_white = []
