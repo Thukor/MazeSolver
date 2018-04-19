@@ -8,3 +8,4 @@ class ImageProcessor:
 	def process_image(image_name, number):
 		birdseye_correction(image_name, number)
 		image_segmentation("warped.png", number)
+		remove_excess_red("solution.jpg")
