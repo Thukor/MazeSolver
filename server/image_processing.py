@@ -132,7 +132,7 @@ def image_segmentation(img, i):
 
     # Separates the two groups of enclosed walls and finds the seam between
     # them (this is the actual solution path).
-    kernel = np.ones((41,41),np.uint8)
+    kernel = np.ones((47,47),np.uint8)
     path = cv2.dilate(path, kernel)
 
     eroded = cv2.erode(path, kernel)
@@ -143,7 +143,6 @@ def image_segmentation(img, i):
 
     colorImg[:,:,0] = 0
     colorImg[:,:,1] = 0
-    # colorImg[:,:,2] = 255
 
     #Creating ROI (AKA, selecting the solution path)
     rows,cols,channels = copy_color.shape
