@@ -30,10 +30,16 @@ def ordered_points(pts):
 	return rect
 
 
-# def remove_excess_red(img):
+def remove_excess_red(img):
 
-#     soln = cv2.imread(img)
-#     copy = soln.copy()
+    soln = cv2.imread(img)
+    soln_copy = soln.copy()
+
+    rows = soln_copy.shape[0]
+    columns = soln_copy.shape[1]
+
+    for i in range(rows):
+        for j in range(columns):
 
 
 
@@ -143,7 +149,7 @@ def image_segmentation(img, i):
 
     # Separates the two groups of enclosed walls and finds the seam between
     # them (this is the actual solution path).
-    kernel = np.ones((31,31),np.uint8)
+    kernel = np.ones((41,41),np.uint8)
     path = cv2.dilate(path, kernel)
 
     eroded = cv2.erode(path, kernel)
