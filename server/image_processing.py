@@ -44,8 +44,8 @@ def remove_excess_red(img):
     for i in range(rows):
         for j in range(columns):
 
-            color = soln_copy[i,j]
-            print(tuple(color))
+            color = tuple(soln_copy[i,j])
+
             if color == (0,0,255):
                 red_pixels.append((i,j))
 
@@ -57,25 +57,25 @@ def remove_excess_red(img):
 
         #iterate up
         for c in range(0,i):
-            color = soln_copy[c,j]
+            color = tuple(soln_copy[c,j])
             if color == (255,255,255):
                 black_pixel_count += 1
 
         #iterate left
         for c in range(0,j):
-            color = soln_copy[i,c]
+            color = tuple(soln_copy[i,c])
             if color == (255,255,255):
                 black_pixel_count += 1
 
         #iterate right
         for c in range(j,columns):
-            color = soln_copy[i,c]
+            color = tuple(soln_copy[i,c])
             if color == (255,255,255):
                 black_pixel_count += 1
 
         #iterate down
         for c in range(i,rows):
-            color = soln_copy[c,j]
+            color = tuple(soln_copy[c,j])
             if color == (255,255,255):
                 black_pixel_count += 1
 
