@@ -45,7 +45,7 @@ def remove_excess_red(img):
         for j in range(columns):
 
             color = soln_copy[i,j]
-            print(color)
+            print(tuple(color))
             if color == (0,0,255):
                 red_pixels.append((i,j))
 
