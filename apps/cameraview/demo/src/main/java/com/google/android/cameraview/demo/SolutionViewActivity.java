@@ -16,8 +16,17 @@
 
 package com.google.android.cameraview.demo;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import java.io.File;
 
 public class SolutionViewActivity extends AppCompatActivity {
 
@@ -25,5 +34,28 @@ public class SolutionViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solution_view);
+
+
+        Button goBack = (Button) findViewById(R.id.back);
+        assert goBack != null;
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        File imgFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "solution.jpg");
+
+        if(imgFile.exists()){
+            Matrix matrix = new Matrix();
+
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//            Bitmap rotatedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(),       myBitmap.getHeight(), matrix, true);
+            ImageView myImage = (ImageView) findViewById(R.id.imgView);
+
+            myImage.setImageBitmap(myBitmap);
+
+        }
     }
 }

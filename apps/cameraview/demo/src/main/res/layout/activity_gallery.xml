@@ -21,35 +21,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-
     tools:context="com.google.android.cameraview.demo.GalleryActivity">
 
-    <ImageView
-        android:id="@+id/imgView"
-        android:layout_width="wrap_content"
-        android:layout_height="548dp"
-        />
-
     <Button
-        android:id="@+id/button"
+        android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="36dp"
-        android:layout_marginStart="68dp"
+        android:layout_marginStart="148dp"
         android:text="@string/go_back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="68dp"/>
+        />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
-        android:layout_marginEnd="68dp"
-        android:text="@string/solve"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="68dp"/>
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/gridview"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:columnWidth="100dp"
+              android:numColumns="auto_fit"
+              android:verticalSpacing="2dp"
+              android:horizontalSpacing="2dp"
+              android:stretchMode="columnWidth"
+              android:gravity="center"
+        />
+
 </android.support.constraint.ConstraintLayout>

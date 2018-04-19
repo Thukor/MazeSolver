@@ -41,6 +41,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Gallery;
 import android.widget.Toast;
 
 import com.google.android.cameraview.AspectRatio;
@@ -173,6 +174,10 @@ public class MainActivity extends AppCompatActivity implements
 //        Intent intent = new Intent(this, ConfirmationActivity.class);
         startActivity(new Intent(this, ConfirmationActivity.class));
     }
+
+    private void launchGalleryActivity() {
+        startActivity(new Intent(this, GalleryActivity.class));
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
             @NonNull int[] grantResults) {
@@ -210,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements
 //                }
 //                return true;
             case R.id.gallery:
+                launchGalleryActivity();
                 //start a gallery activity
                 return true;
             case R.id.switch_flash:

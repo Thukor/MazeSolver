@@ -42,6 +42,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Time;
+import java.util.Timer;
 
 public class ConfirmationActivity extends AppCompatActivity {
     @Override
@@ -79,7 +81,7 @@ public class ConfirmationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new ServerConnection().execute(imgFile);
-                launchSolutionViewActivity();
+
             }
         });
     }
@@ -99,14 +101,10 @@ public class ConfirmationActivity extends AppCompatActivity {
             }
             return null;
         }
-//        @Override
-//        protected void onPostExecute(String result){
-//            try {
-//                bytesToImage(result);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+        @Override
+        protected void onPostExecute(String result){
+            launchSolutionViewActivity();
+        }
     }
     private void launchSolutionViewActivity() {
         startActivity(new Intent(this, SolutionViewActivity.class));
