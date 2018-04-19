@@ -29,6 +29,17 @@ def ordered_points(pts):
 
 	return rect
 
+
+# def remove_excess_red(img):
+
+#     soln = cv2.imread(img)
+#     copy = soln.copy()
+
+
+
+
+
+
 def birdseye_correction(img, i):
     """Use homography to transform an image from an angled perspective to a
        rectified image.
@@ -132,7 +143,7 @@ def image_segmentation(img, i):
 
     # Separates the two groups of enclosed walls and finds the seam between
     # them (this is the actual solution path).
-    kernel = np.ones((51,51),np.uint8)
+    kernel = np.ones((31,31),np.uint8)
     path = cv2.dilate(path, kernel)
 
     eroded = cv2.erode(path, kernel)
