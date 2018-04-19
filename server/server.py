@@ -21,7 +21,7 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 	def _set_headers_for_send_image(self,image_name):
 		image = open(image_name, 'rb')
 		self.send_response(200)
-		self.send_header("Content-type", "image/jpeg")
+		self.send_header("Content-type", "image/jpg")
 		self.end_headers()
 		img_bytes = base64.b64encode(image.read())
 		self.wfile.write(img_bytes)
