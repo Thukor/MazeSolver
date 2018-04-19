@@ -143,7 +143,7 @@ def image_segmentation(img, i):
 
     colorImg[:,:,0] = 0
     colorImg[:,:,1] = 0
-    colorImg[:,:,2] = 255
+    # colorImg[:,:,2] = 255
 
     #Creating ROI (AKA, selecting the solution path)
     rows,cols,channels = copy_color.shape
