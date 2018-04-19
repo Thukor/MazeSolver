@@ -30,16 +30,16 @@ def ordered_points(pts):
 	return rect
 
 
-def remove_excess_red(img):
+# def remove_excess_red(img):
 
-    soln = cv2.imread(img)
-    soln_copy = soln.copy()
+#     soln = cv2.imread(img)
+#     soln_copy = soln.copy()
 
-    rows = soln_copy.shape[0]
-    columns = soln_copy.shape[1]
+#     rows = soln_copy.shape[0]
+#     columns = soln_copy.shape[1]
 
-    for i in range(rows):
-        for j in range(columns):
+#     for i in range(rows):
+#         for j in range(columns):
 
 
 
