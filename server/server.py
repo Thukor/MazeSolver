@@ -26,6 +26,7 @@ class MazeSolverRequestHandler(BaseHTTPRequestHandler):
 		img_bytes = base64.b64encode(image.read())
 		image.close()
 		data = open('dump.txt', 'wb')
+		print(len(str(img_bytes)))
 		data.write(img_bytes)
 		data.close()
 		self.wfile.write(img_bytes)
