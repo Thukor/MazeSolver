@@ -31,7 +31,6 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -41,10 +40,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Gallery;
 import android.widget.Toast;
 
-import com.google.android.cameraview.AspectRatio;
 import com.google.android.cameraview.CameraView;
 
 import java.io.File;
@@ -53,18 +50,20 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 
 /**
  * This demo app saves the taken picture to a constant file.
  * $ adb pull /sdcard/Android/data/com.google.android.cameraview.demo/files/Pictures/picture.jpg
  */
+
+/**
+ * This activity is the viewer
+ */
 public class MainActivity extends AppCompatActivity implements
         ActivityCompat.OnRequestPermissionsResultCallback
 //        AspectRatioFragment.Listener
-    {
+{
 
     private static final String TAG = "MainActivity";
 
@@ -178,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements
     private void launchGalleryActivity() {
         startActivity(new Intent(this, GalleryActivity.class));
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
             @NonNull int[] grantResults) {

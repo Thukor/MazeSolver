@@ -17,18 +17,15 @@
 package com.google.android.cameraview.demo;
 
 import static android.util.Base64.DEFAULT;
-import static android.util.Base64.NO_WRAP;
-import static android.util.Base64.URL_SAFE;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -36,14 +33,8 @@ import android.widget.ImageView;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.sql.Time;
-import java.util.Timer;
 
 public class ConfirmationActivity extends AppCompatActivity {
     @Override
@@ -55,12 +46,13 @@ public class ConfirmationActivity extends AppCompatActivity {
         File imgDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         final File imgFile = lastFileModified(imgDir.toString());
 
-        if(imgFile.exists()){
+        if (imgFile.exists()) {
             Matrix matrix = new Matrix();
             matrix.postRotate(90);
 
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            Bitmap rotatedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(),       myBitmap.getHeight(), matrix, true);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(),
+                    myBitmap.getHeight(), matrix, true);
             ImageView myImage = (ImageView) findViewById(R.id.imgView);
 
             myImage.setImageBitmap(rotatedBitmap);
@@ -85,7 +77,8 @@ public class ConfirmationActivity extends AppCompatActivity {
             }
         });
     }
-    class ServerConnection extends AsyncTask<File, Void, String>{
+
+    class ServerConnection extends AsyncTask<File, Void, String> {
         @Override
         protected String doInBackground(File... file) {
             String solutionFile = null;
@@ -101,14 +94,17 @@ public class ConfirmationActivity extends AppCompatActivity {
             }
             return null;
         }
+
         @Override
-        protected void onPostExecute(String result){
+        protected void onPostExecute(String result) {
             launchSolutionViewActivity();
         }
     }
+
     private void launchSolutionViewActivity() {
         startActivity(new Intent(this, SolutionViewActivity.class));
     }
+
     public static File lastFileModified(String dir) {
         File fl = new File(dir);
         File[] files = fl.listFiles(new FileFilter() {
@@ -126,8 +122,8 @@ public class ConfirmationActivity extends AppCompatActivity {
         }
         return choice;
     }
-    private void bytesToImage(String bytes) throws Exception
-    {
+
+    private void bytesToImage(String bytes) throws Exception {
         String fileName = "solution.jpg";
         System.out.println(bytes.length());
         File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), fileName);

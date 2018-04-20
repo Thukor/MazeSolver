@@ -16,32 +16,27 @@
 
 package com.google.android.cameraview.demo;
 
-import static android.util.Base64.DEFAULT;
 import static android.util.Base64.NO_WRAP;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.util.Base64;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
  * Created by ??? on 4/18/18.
  */
 
-class HttpURLConnector extends AsyncTask<String,File, Void>{
+class HttpURLConnector extends AsyncTask<String, File, Void> {
     private final String USER_AGENT = "Mozilla/5.0";
+
     public static String imageToBytes(File image) throws Exception {
         String imageString = null;
         try {
@@ -57,7 +52,7 @@ class HttpURLConnector extends AsyncTask<String,File, Void>{
     }
 
 
-//    private void launchCornerActivity() {
+    //    private void launchCornerActivity() {
 ////        Intent intent = new Intent(this, ConfirmationActivity.class);
 //        startActivity(new Intent(this, ConfirmationActivity.class));
 //    }
@@ -94,7 +89,7 @@ class HttpURLConnector extends AsyncTask<String,File, Void>{
     }
 
     // HTTP POST request
-    protected String sendPost(String urlParameters)  throws Exception {
+    protected String sendPost(String urlParameters) throws Exception {
 
         String url = "http://72.224.10.212:1080/solve";
         URL obj = new URL(url);
