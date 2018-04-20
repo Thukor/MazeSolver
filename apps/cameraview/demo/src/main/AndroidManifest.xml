@@ -22,19 +22,25 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Demo">
-        <activity android:name=".MainActivity">
+        android:theme="@style/Theme.Demo"
+        >
+
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".GalleryActivity">
+        <activity android:name=".GalleryActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".ConfirmationActivity">
+        <activity android:name=".ConfirmationActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".SolutionViewActivity">
+        <activity android:name=".SolutionViewActivity"
+                  android:screenOrientation="portrait">
         </activity>
     </application>
 

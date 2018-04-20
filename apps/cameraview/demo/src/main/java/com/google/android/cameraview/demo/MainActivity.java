@@ -51,18 +51,11 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
-/**
- * This demo app saves the taken picture to a constant file.
- * $ adb pull /sdcard/Android/data/com.google.android.cameraview.demo/files/Pictures/picture.jpg
- */
-
 /**
  * This activity is the viewer
  */
 public class MainActivity extends AppCompatActivity implements
         ActivityCompat.OnRequestPermissionsResultCallback
-//        AspectRatioFragment.Listener
 {
 
     private static final String TAG = "MainActivity";
@@ -170,7 +163,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void launchCornerActivity() {
-//        Intent intent = new Intent(this, ConfirmationActivity.class);
         startActivity(new Intent(this, ConfirmationActivity.class));
     }
 
@@ -204,19 +196,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.aspect_ratio:
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                if (mCameraView != null
-//                        && fragmentManager.findFragmentByTag(FRAGMENT_DIALOG) == null) {
-//                    final Set<AspectRatio> ratios = mCameraView.getSupportedAspectRatios();
-//                    final AspectRatio currentRatio = mCameraView.getAspectRatio();
-//                    AspectRatioFragment.newInstance(ratios, currentRatio)
-//                            .show(fragmentManager, FRAGMENT_DIALOG);
-//                }
-//                return true;
             case R.id.gallery:
                 launchGalleryActivity();
-                //start a gallery activity
                 return true;
             case R.id.switch_flash:
                 if (mCameraView != null) {
@@ -226,24 +207,9 @@ public class MainActivity extends AppCompatActivity implements
                     mCameraView.setFlash(FLASH_OPTIONS[mCurrentFlash]);
                 }
                 return true;
-//            case R.id.switch_camera:
-//                if (mCameraView != null) {
-//                    int facing = mCameraView.getFacing();
-//                    mCameraView.setFacing(facing == CameraView.FACING_FRONT ?
-//                            CameraView.FACING_BACK : CameraView.FACING_FRONT);
-//                }
-//                return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    @Override
-//    public void onAspectRatioSelected(@NonNull AspectRatio ratio) {
-//        if (mCameraView != null) {
-//            Toast.makeText(this, ratio.toString(), Toast.LENGTH_SHORT).show();
-//            mCameraView.setAspectRatio(ratio);
-//        }
-//    }
 
     private Handler getBackgroundHandler() {
         if (mBackgroundHandler == null) {
