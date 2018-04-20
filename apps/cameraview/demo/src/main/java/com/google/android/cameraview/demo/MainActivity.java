@@ -161,15 +161,26 @@ public class MainActivity extends AppCompatActivity implements
             mBackgroundHandler = null;
         }
     }
-
+    /**
+     * Switch to corner view activity
+     */
     private void launchCornerActivity() {
         startActivity(new Intent(this, ConfirmationActivity.class));
     }
-
+    /**
+     * Switch to gallery view activity
+     */
     private void launchGalleryActivity() {
         startActivity(new Intent(this, GalleryActivity.class));
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     * @effects checks for camera permissions from user and if no permissions application wont run
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
             @NonNull int[] grantResults) {
@@ -182,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements
                     Toast.makeText(this, R.string.camera_permission_not_granted,
                             Toast.LENGTH_SHORT).show();
                 }
-                // No need to start camera here; it is handled by onResume
                 break;
         }
     }
@@ -193,6 +203,13 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
+    /**
+     *
+     * @param item
+     * @effects changes the flash settings or launches the gallery view depending on what
+     *          is clicked
+     * @return true on click of button
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -233,6 +250,12 @@ public class MainActivity extends AppCompatActivity implements
             Log.d(TAG, "onCameraClosed");
         }
 
+        /**
+         *
+         * @param cameraView The associated {@link CameraView}.
+         * @param data       JPEG data.
+         * @effects creates a jpg image to be saved into the phone's picture directory
+         */
         @Override
         public void onPictureTaken(CameraView cameraView, final byte[] data) {
             Log.d(TAG, "onPictureTaken " + data.length);
@@ -265,6 +288,10 @@ public class MainActivity extends AppCompatActivity implements
             launchCornerActivity();
         }
 
+        /**
+         *
+         * @return file name of the picture taken
+         */
         private String createImageFileName() {
             String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             String fileName = "MAZE_" + timestamp + ".jpg";
