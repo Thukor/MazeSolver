@@ -18,7 +18,6 @@ package com.google.android.cameraview.demo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -49,11 +48,8 @@ public class SolutionViewActivity extends AppCompatActivity {
                 "solution.jpg");
 
         if (imgFile.exists()) {
-            Matrix matrix = new Matrix();
 
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//            Bitmap rotatedBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(),
-//   myBitmap.getHeight(), matrix, true);
             ImageView myImage = (ImageView) findViewById(R.id.imgView);
 
             myImage.setImageBitmap(myBitmap);

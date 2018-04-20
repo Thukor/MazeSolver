@@ -78,6 +78,10 @@ public class ConfirmationActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Async task runs the connector in the background so the current view can be separated from
+     * the operation
+     */
     class ServerConnection extends AsyncTask<File, Void, String> {
         @Override
         protected String doInBackground(File... file) {
@@ -101,10 +105,17 @@ public class ConfirmationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * sends us to the solution view activity
+     */
     private void launchSolutionViewActivity() {
         startActivity(new Intent(this, SolutionViewActivity.class));
     }
 
+    /**
+     * @param dir
+     * @return last modified file in the directory. This will be the most recent taken image
+     */
     public static File lastFileModified(String dir) {
         File fl = new File(dir);
         File[] files = fl.listFiles(new FileFilter() {
@@ -123,6 +134,13 @@ public class ConfirmationActivity extends AppCompatActivity {
         return choice;
     }
 
+    /**
+     *
+     * @param bytes
+     * @effects decodes a string of bytes that was encoded into Base64 format. Decoding the string
+     *          gives us the digital image
+     * @throws Exception
+     */
     private void bytesToImage(String bytes) throws Exception {
         String fileName = "solution.jpg";
         System.out.println(bytes.length());
