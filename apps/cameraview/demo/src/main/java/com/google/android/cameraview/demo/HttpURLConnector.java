@@ -30,13 +30,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by ??? on 4/18/18.
- */
-
 class HttpURLConnector extends AsyncTask<String, File, Void> {
     private final String USER_AGENT = "Mozilla/5.0";
 
+    /**
+     *
+     * @param image
+     * @effects encode the image into a string of bytes that is to be sent to the server to be decoded
+     *          and processes
+     * @return  string of Base64 encoding of the image
+     * @throws Exception
+     */
     public static String imageToBytes(File image) throws Exception {
         String imageString = null;
         try {
@@ -51,6 +55,13 @@ class HttpURLConnector extends AsyncTask<String, File, Void> {
         return imageString;
     }
 
+    /**
+     *
+     * @param urlParameters
+     * @effects sends the encaded Base64 image to a server for processing
+     * @return the encoded Base64 of the processed image
+     * @throws Exception
+     */
     // HTTP POST request
     protected String sendPost(String urlParameters) throws Exception {
 

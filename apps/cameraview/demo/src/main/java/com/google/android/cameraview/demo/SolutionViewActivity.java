@@ -28,7 +28,11 @@ import android.widget.ImageView;
 import java.io.File;
 
 public class SolutionViewActivity extends AppCompatActivity {
-
+    /**
+     *
+     * @param savedInstanceState
+     * @effects displays the just captured image waiting to be solved
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
