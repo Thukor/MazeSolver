@@ -54,7 +54,8 @@ public class GalleryActivity extends AppCompatActivity {
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ImageAdapter(this));
-
+        
+        // button handler
         Button goBack = (Button) findViewById(R.id.back);
         assert goBack != null;
         goBack.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +65,7 @@ public class GalleryActivity extends AppCompatActivity {
             }
         });
 
+        //handler for gridView items selection
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 File toSend = sdDirFiles[position];
@@ -71,7 +73,11 @@ public class GalleryActivity extends AppCompatActivity {
             }
         });
     }
-
+    
+    /**
+     * creates ImageView objects, stores them into an ArrayList for later recall. Avalible from both GalleryActivity
+     * class and ImageAdapter subclass 
+     */
     public void loadImages() {
         List<Integer> drawablesId = new ArrayList<Integer>();
         int picIndex = 12345;
@@ -90,7 +96,9 @@ public class GalleryActivity extends AppCompatActivity {
         mThumbIds = (Integer[]) drawablesId.toArray(new Integer[0]);
     }
 
-
+    /**
+     * ImageAdapter extends base adapter to be able to use ImageViews in the GridView
+     */
     public class ImageAdapter extends BaseAdapter {
         private Context mContext;
 
@@ -129,7 +137,11 @@ public class GalleryActivity extends AppCompatActivity {
 
 
     }
-
+    
+    /**
+     * Async task runs the connector in the background so the current view can be separated from
+     * the operation
+     */
     class ServerConnection extends AsyncTask<File, Void, String> {
         @Override
         protected String doInBackground(File... file) {
@@ -152,11 +164,19 @@ public class GalleryActivity extends AppCompatActivity {
             launchSolutionViewActivity();
         }
     }
-
+    /**
+     * Switch to solution view activity
+     */
     private void launchSolutionViewActivity() {
         startActivity(new Intent(this, SolutionViewActivity.class));
     }
-
+     
+    /**
+     * @param bytes
+     * @effects decodes a string of bytes to that was encoded into Base64 format. Decoding the string
+     *          gives us the digital image
+     * @throws Exception
+     */
     private void bytesToImage(String bytes) throws Exception {
         String fileName = "solution.jpg";
         System.out.println(bytes.length());
