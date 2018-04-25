@@ -1,9 +1,14 @@
-![image](https://github.com/Thukor/MazeSolver/blob/master/maze_image_logo.PNG)
-# MazeSolver
+
+STEP ONE
+![image](https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/31300663_2071687699715976_5668251928908267520_n.jpg)
+
+INSTALLING
+![image](https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/31317775_2071687656382647_1315092146784567296_n.jpg)
 
 
-Simple Maze Solver App
 
-There are currently 2 Android Studio projects:
-* Camera2APITestApp - This application only has a camera and it is able to capture a single image and save it to phone storage.
-* Tabbed Application - This application has a tabbed layout with a tab for camera and a tab for saved maze solutions. The camera preview works, but there is no method to capture or save images at this time.
+APP INSTALLED
+![image](https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/31282823_2071687619715984_4231016912294772736_n.jpg)
+
+PERMISSIONS
+![image](https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/31290270_2071687603049319_5099615808154238976_n.jpg)
