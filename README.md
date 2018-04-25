@@ -1,7 +1,7 @@
 
 STEP ONE
-![image](https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/31300663_2071687699715976_5668251928908267520_n.jpg | width=270)
-
+![image](https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/31300663_2071687699715976_5668251928908267520_n.jpg)
+<img src="https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/31300663_2071687699715976_5668251928908267520_n.jpg" width="270">
 INSTALLING
 ![image](https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/31317775_2071687656382647_1315092146784567296_n.jpg | width=270)
 
