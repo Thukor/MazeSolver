@@ -1,4 +1,4 @@
-![alt text](https://github.com/Thukor/MazeSolver/blob/master/maze_image_logo.PNG)
+![image](https://github.com/Thukor/MazeSolver/blob/master/maze_image_logo.PNG)
 # MazeSolver
 
 
