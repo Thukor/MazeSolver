@@ -1,6 +1,6 @@
 theme: jekyll-theme-minimal
 
-title: [MazeSolver]
-description: [An Android application that solves mazes for you!]
+title: MazeSolver
+description: An Android application that solves mazes for you!
 
-logo: [https://github.com/Thukor/MazeSolver/blob/master/maze_image_logo.PNG]
+logo: https://github.com/Thukor/MazeSolver/blob/master/maze_image_logo.PNG
