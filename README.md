@@ -1,4 +1,7 @@
+![alt text](https://github.com/Thukor/MazeSolver/master/maze_image_logo.png)
 # MazeSolver
+
+
 Simple Maze Solver App
 
 There are currently 2 Android Studio projects:
