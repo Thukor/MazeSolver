@@ -29,7 +29,7 @@ Upon running the application for the first time, you will be prompted to allow M
 # Usage:
 MazeSolver has two main pages: Camera and Gallery. You can use the camera to capture a new maze image, or the gallery to recall the solution to a maze you have already solved with MazeSolver. 
 
-| <img src="https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/camera.png" width="270"></td>| <img src="https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/gallery.png" width="270"> |
+| <img src="https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/camera.png" width="270">| <img src="https://raw.githubusercontent.com/Thukor/MazeSolver/master/resources/gallery.png" width="270"> |
 |--|--|
 | Camera View | Gallery View |
 
